@@ -198,40 +198,11 @@ class Set_creation:
         return rd_seq
 
 
-value_range, length = [0,1000] , 10000
-data = Set_creation(value_range, length).get_random_seq()
-# print(data)
+# value_range, length = [0,1000] , 10000
+# data = Set_creation(value_range, length).get_random_seq()
+# # print(data)
 
-merge_sort_instance = Mergesort(data)
-heap_sort_instance = Heapsort(data)   
-print(merge_sort_instance["recorted_time"]) 
-print(heap_sort_instance["recorted_time"]) 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# merge_sort_instance = Mergesort(data)
+# heap_sort_instance = Heapsort(data)   
+# print(merge_sort_instance["recorted_time"]) 
+# print(heap_sort_instance["recorted_time"]) 
