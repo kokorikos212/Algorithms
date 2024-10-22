@@ -1,4 +1,3 @@
-
 import random as rd
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -28,7 +27,9 @@ class Algorithms: # Masterclass Algo
     
 @Tester
 class Heapsort(Algorithms):
-    """Παίρνει ακολουθία σε μορφή λίστας και την επιστρέφει τροποποιημένη απο τον αλγόριθμο της Ταξινόμηση Σωρού"""
+    """
+    Takes a sequence in the form of a list and returns it modified by the Heap Sort algorithm.
+    """
     # Αυτή είναι η αναπαράσταση του αλγόριθμου ταξινόμησης σωρού.
 
     def Left(self, i):
@@ -42,8 +43,7 @@ class Heapsort(Algorithms):
 
     def Build_max_heap(self):
         """
-        Μτβλτσ(A)
-        Διεξέρχεται από τους υπόλοιπους κόμβους του δένδρου και εκτελεί σε καθέναν την ΑΠΟΚΑΤΑΣΤΑΣΗ ΣΩΡΟΥ ΜΕΓΙΣΤΟΥ.
+        It traverses the remaining nodes of the tree and performs MAX HEAPIFY on each one.
         """
         n = len(self.A)
         
@@ -54,10 +54,6 @@ class Heapsort(Algorithms):
     def Max_hepify(self, i, n):
         """
         Maintain the max-heap property for a binary heap represented by array A.
-
-        Aποκατάσταση της ιδιότητας του σωρού. Χρησιμοποιούμε αυτή την συνάρτιση για να ελέγξουμε το κατά πόσων:
-         η μεταβολή που προκάλεσε το προηγούμενο itteration του αλγόριθμου, διατάραξε την ιδιότητα της σωρού μεγίστου.
-
 
         Parameters:
         - A: The array representing the binary heap.
@@ -82,10 +78,8 @@ class Heapsort(Algorithms):
 
     def Sort(self):
         """
-        Παίρνει σαν όρισμα μόνο την ακολουθία Α σε μορφή λίστας. 
-        Χρησιμοποιεί την ΚΑΤΑΣΚΕΥΗ ΣΩΡΟΥ ΜΕΓΙΣΤΟΥ (Build max heap) 
-        και την ΑΠΟΚΑΤΑΣΤΑΣΗ ΣΩΡΟΥ ΜΕΓΙΣΤΟΥ(Max_hepify) για να 
-        ταξινομίσει την δεδομένη ακολουθία."""
+        It takes as an argument only the sequence A in the form of a list.
+        It uses BUILD MAX HEAP and MAX HEAPIFY to sort the given sequence."""
         self.Build_max_heap()
         n = len(self.A)
         
@@ -167,6 +161,7 @@ class Mergesort(Algorithms):
                 # Merge the sorted left and right subarrays.
                 self.Merge(self.A, p, q, r)
         return self.A
+        
 class Set_creation:
     """ This class hase a single function for creating a random sequence with given length and range of whicht the values are retrieved."""
     def __init__(self, value_range, length):
@@ -202,7 +197,7 @@ class Set_creation:
 # data = Set_creation(value_range, length).get_random_seq()
 # # print(data)
 
-# merge_sort_instance = Mergesort(data)
+# # merge_sort_instance = Mergesort(data)
 # heap_sort_instance = Heapsort(data)   
-# print(merge_sort_instance["recorted_time"]) 
+# # print(merge_sort_instance["recorted_time"]) 
 # print(heap_sort_instance["recorted_time"]) 
