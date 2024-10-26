@@ -2,7 +2,9 @@ import random as rd
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np 
-import time
+import time, os 
+
+import pprint
 
     
 def Tester(algorithm_inst):
@@ -96,16 +98,44 @@ class Heapsort(Algorithms):
 class Mergesort(Algorithms):
     """ 
     A class representing the Merge Sort algorithm.
-
     This class inherits from the 'Algorithms' superclass and provides an
     implementation of the Merge Sort sorting algorithm.
     """
-    def Merge(self, p, q, r):
+
+    def __init__(self, array, output_dir='plots'):
+        """ Initializes the MergeSort with an array to sort and a directory to save plots. """
+        self.A = array
+        self.output_dir = output_dir
+        os.makedirs(output_dir, exist_ok=True)  # Create the directory if it doesn't exist
+
+    def visualize_sort(self, current_sequence, step):
+        """ 
+        Visualizes the current state of the array during the sort and saves the plot to a file.
+        
+        Args:
+        current_sequence (list): The current state of the array to visualize.
+        step (int): The step number for the current sorting stage, used for naming the file.
         """
+        plt.figure(figsize=(8, 6))  # Set the figure size here
+        plt.scatter(range(len(current_sequence)), current_sequence, marker='.', color='r', s=5)
+        plt.xlabel('Index')
+        plt.ylabel('Value')
+        plt.title(f'Sequence of Length {len(current_sequence)} at Step {step}')
+        plt.grid()
+        plt.savefig(os.path.join(self.output_dir, f'step_{step}.png'))  # Save the plot as a PNG file
+        plt.close()  # Close the plot to free memory
+
+    def Merge(self, p, q, r, step, plot=0):
+        """
+        Merges two subarrays of A[p..r].
+        First subarray is A[p..q]
+        Second subarray is A[q+1..r]
+
         Args:
         p (int): The index of the first element in the left subarray.
         q (int): The index of the last element in the left subarray.
         r (int): The index of the last element in the right subarray.
+        step (int): The step number for the current sorting stage, used for naming the file.
         """
         # Calculate the sizes of the two subarrays to be merged.
         n1 = q - p + 1  # Size of the left subarray.
@@ -137,67 +167,87 @@ class Mergesort(Algorithms):
             else:
                 self.A[k] = R[j]  # The current element in the right subarray is smaller.
                 j += 1
+        if plot:
+            # Visualize the current state of the array after merging
+            self.visualize_sort(self.A, step)
+
+    def MergeSort(self, p, r, step=0):
+        """
+        Sorts an array using the Merge Sort algorithm.
+        
+        Args:
+        p (int): The index of the first element in the subarray.
+        r (int): The index of the last element in the subarray.
+        step (int): The step number for the current sorting stage, used for naming the file.
+        """
+        # Check if the left index 'p' is less than the right index 'r', indicating a valid subarray.
+        if p < r:
+            # Calculate the midpoint 'q' of the subarray.
+            q = (p + r) // 2
+
+            # Recursively sort the left and right subarrays.
+            self.MergeSort(p, q, step + 1)       # Sort the left subarray.
+            self.MergeSort(q + 1, r, step + 1)   # Sort the right subarray.
+
+            # Merge the sorted left and right subarrays.
+            self.Merge(p, q, r, step)
 
     def Sort(self):
-        r = len(self.A)-1
-        p = 0
-        def MergeSort(self, r, p=0):
-            """
-                Sorts an array using the Merge Sort algorithm.
-                
-                Args:
-                p (int): The index of the first element in the subarray.
-                r (int): The index of the last element in the subarray.
-            """
-            # Check if the left index 'p' is less than the right index 'r', indicating a valid subarray.
-            if p < r:
-                # Calculate the midpoint 'q' of the subarray.
-                q = (p + r) // 2
-
-                # Recursively sort the left and right subarrays.
-                self.Sort(self.A, p, q)       # Sort the left subarray.
-                self.Sort(self.A, q + 1, r)   # Sort the right subarray.
-
-                # Merge the sorted left and right subarrays.
-                self.Merge(self.A, p, q, r)
+        """ Sorts the array using the Merge Sort algorithm and saves visualizations. """
+        self.MergeSort(0, len(self.A) - 1)
+        # print("Sorting complete. ")
         return self.A
-        
+
 class Set_creation:
     """ This class hase a single function for creating a random sequence with given length and range of whicht the values are retrieved."""
-    def __init__(self, value_range, length):
+    def __init__(self, value_range):
         """
         Args:
         value_range (2d vector): The boundaries of the domain.
         length (int): The desired self.length of the sequence.
         """
         self.value_range = value_range
-        self.length = length
+        # self.length = length
 
     def __repr__(self):
         print("__repr__")
-        return self.value_range , self.length
+        return self.value_range 
     
-    def get_random_seq(self):
+    def get_random_seq(self, size):
         """
         Returns:
         List: A list containing random elements within the specified range.
         """
         
-        if self.length < 1:
+        if size < 1:
             return []  # Return an empty list for an invalid self.length.
 
         start, end = self.value_range[0], self.value_range[1]
         rd_seq = []
-        for i in range(self.length):
+        for i in range(size):
             rd_seq.append(rd.randint(start, end) )
         return rd_seq
-
+    
+    def get_multiple_random_seq(self, Sizes):
+        """Creates multiple sequence in the given interval with possibly differend sizes given as a list.
+        args
+        Sizes: The list with the sizes of each random sequence
+        returns the sequences as a list of lists.
+        """
+        Sequences =[]
+        for size in Sizes:
+            rd_seq = self.get_random_seq(size)
+            Sequences.append(rd_seq)
+        return Sequences 
 
 # value_range, length = [0,1000] , 10000
-# data = Set_creation(value_range, length).get_random_seq()
-# # print(data)
+# data = Set_creation(value_range).get_random_seq(length) 
+# print(data == sorted(data) )
 
-# # merge_sort_instance = Mergesort(data)
-# heap_sort_instance = Heapsort(data)   
-# # print(merge_sort_instance["recorted_time"]) 
+# merge_sort_instance = Mergesort(data)
+# # heap_sort_instance = Heapsort(data)    
+# print(merge_sort_instance["sorted_data"] == sorted(merge_sort_instance["sorted_data"])) 
+
+# print(merge_sort_instance["recorted_time"]) 
 # print(heap_sort_instance["recorted_time"]) 
+
