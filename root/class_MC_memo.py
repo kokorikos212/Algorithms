@@ -121,17 +121,17 @@ class MC_Memo(Algorithms):
 #         {"coins": [5, 10, 25], "target_sum": 30, "expected": 2} # 25+5
 #     ]
 
-#     # Test each case
-#     for idx, test_case in enumerate(test_cases, start=1):
-#         coins = test_case["coins"]
-#         target_sum = test_case["target_sum"]
-#         expected = test_case["expected"]
+    ## Test each case
+    # for idx, test_case in enumerate(test_cases, start=1):
+    #     coins = test_case["coins"]
+    #     target_sum = test_case["target_sum"]
+    #     expected = test_case["expected"]
 
-#         print(f"Test Case {idx}: Coins = {coins}, Target Sum = {target_sum}")
-#         result = rec_mnc.time_execution(coins, target_sum)
+    #     print(f"Test Case {idx}: Coins = {coins}, Target Sum = {target_sum}")
+    #     result = rec_mnc.time_execution(coins, target_sum)
 
-#         # Verify the result
-#         if result == expected:
-#             print(f"PASSED: Expected {expected}, Got {result}")
-#         else:
-#             print(f"FAILED: Expected {expected}, Got {result}")
+    #     # Verify the result
+    #     if result["result"] == expected:
+    #         print(f"PASSED: Expected {expected}, Got {result}")
+    #     else:
+    #         print(f"FAILED: Expected {expected}, Got {result}")

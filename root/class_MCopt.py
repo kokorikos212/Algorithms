@@ -48,19 +48,28 @@ class MC_OPT(Algorithms):
     """
 
     def __init__(self):
+        """
+        Initializes the MC_OPT instance and sets the algorithm name.
+        """
         super().__init__("Memoized (Tabulation) solution for the Minimum Coin Change problem.")
     
     def execute(self, coins, target_sum):
         """
-        Optimized bottom-up dynamic programming solution that reduces space complexity 
-        by using a 1D table instead of a 2D table for the coin change problem.
+        Computes the minimum number of coins required to form the target sum using a 
+        bottom-up dynamic programming approach with a 1D DP table.
 
         Parameters:
-        coins (list): List of available coin denominations.
-        target_sum (int): The sum for which the minimum number of coins is to be calculated.
+        ----------
+        coins : list
+            List of available coin denominations.
+        target_sum : int
+            The desired sum for which the minimum number of coins is required.
 
         Returns:
-        int: Minimum number of coins needed, or -1 if it's not possible to form the sum.
+        -------
+        int
+            Minimum number of coins needed to achieve the target sum, or -1 if 
+            the sum cannot be formed with the given denominations.
         """
         dp = [float('inf')] * (target_sum + 1)
         dp[0] = 0
@@ -84,29 +93,29 @@ class MC_OPT(Algorithms):
         return dp[target_sum] if dp[target_sum] != float('inf') else -1
 
     
-if __name__ == "__main__":
-    # Instantiate the recursive minimum coin change class
-    rec_mnc = MC_OPT()
+# if __name__ == "__main__":
+#     # Instantiate the recursive minimum coin change class
+#     rec_mnc = MC_OPT()
 
-    # Define test cases
-    test_cases = [
-        {"coins": [1, 2, 5], "target_sum": 11, "expected": 3},  # 5+5+1
-        {"coins": [2], "target_sum": 3, "expected": -1},        # Not possible
-        {"coins": [1, 2, 3], "target_sum": 4, "expected": 2},   # 3+1 or 2+2
-        {"coins": [5, 10, 25], "target_sum": 30, "expected": 2} # 25+5
-    ]
+#     # Define test cases
+#     test_cases = [
+#         {"coins": [1, 2, 5], "target_sum": 11, "expected": 3},  # 5+5+1
+#         {"coins": [2], "target_sum": 3, "expected": -1},        # Not possible
+#         {"coins": [1, 2, 3], "target_sum": 4, "expected": 2},   # 3+1 or 2+2
+#         {"coins": [5, 10, 25], "target_sum": 30, "expected": 2} # 25+5
+#     ]
 
-    # Test each case
-    for idx, test_case in enumerate(test_cases, start=1):
-        coins = test_case["coins"]
-        target_sum = test_case["target_sum"]
-        expected = test_case["expected"]
+    # # Test each case
+    # for idx, test_case in enumerate(test_cases, start=1):
+    #     coins = test_case["coins"]
+    #     target_sum = test_case["target_sum"]
+    #     expected = test_case["expected"]
 
-        print(f"Test Case {idx}: Coins = {coins}, Target Sum = {target_sum}")
-        result = rec_mnc.execute(coins, target_sum)
+    #     print(f"Test Case {idx}: Coins = {coins}, Target Sum = {target_sum}")
+    #     result = rec_mnc.time_execution(coins, target_sum)
 
-        # Verify the result
-        if result == expected:
-            print(f"PASSED: Expected {expected}, Got {result}")
-        else:
-            print(f"FAILED: Expected {expected}, Got {result}")
+    #     # Verify the result
+    #     if result["result"] == expected:
+    #         print(f"PASSED: Expected {expected}, Got {result}")
+    #     else:
+    #         print(f"FAILED: Expected {expected}, Got {result}")

@@ -51,7 +51,7 @@ class MC_Recursive(Algorithms):
     --------
     >>> coins = [1, 2, 5]
     >>> target_sum = 11
-    >>> mc_recursive = MinimumCoinsRecursive()
+    >>> mc_recursive = MC_Recursive()
     >>> mc_recursive.execute(coins, target_sum)
     3
     """
@@ -105,32 +105,32 @@ class MC_Recursive(Algorithms):
         ans = self.minCoinsRecur(0, target_sum, coins)
         return ans if ans != float('inf') else -1
 
-if __name__ == "__main__":
-    # Instantiate the recursive minimum coin change class
-    rec_mnc = MC_Recursive()
+# if __name__ == "__main__":
+#     # Instantiate the recursive minimum coin change class
+#     rec_mnc = MC_Recursive()
 
-    # Define test cases
-    test_cases = [
-        {"coins": [1, 2, 5], "target_sum": 11, "expected": 3},  # 5+5+1
-        {"coins": [2], "target_sum": 3, "expected": -1},        # Not possible
-        {"coins": [1, 2, 3], "target_sum": 4, "expected": 2},   # 3+1 or 2+2
-        {"coins": [5, 10, 25], "target_sum": 30, "expected": 2} # 25+5
-    ]
+#     # Define test cases
+#     test_cases = [
+#         {"coins": [1, 2, 5], "target_sum": 11, "expected": 3},  # 5+5+1
+#         {"coins": [2], "target_sum": 3, "expected": -1},        # Not possible
+#         {"coins": [1, 2, 3], "target_sum": 4, "expected": 2},   # 3+1 or 2+2
+#         {"coins": [5, 10, 25], "target_sum": 30, "expected": 2} # 25+5
+#     ]
 
-    # Test each case
-    for idx, test_case in enumerate(test_cases, start=1):
-        coins = test_case["coins"]
-        target_sum = test_case["target_sum"]
-        expected = test_case["expected"]
+#     # Test each case
+#     for idx, test_case in enumerate(test_cases, start=1):
+#         coins = test_case["coins"]
+#         target_sum = test_case["target_sum"]
+#         expected = test_case["expected"]
 
-        print(f"Test Case {idx}: Coins = {coins}, Target Sum = {target_sum}")
-        result = rec_mnc.execute(coins, target_sum)
+#         print(f"Test Case {idx}: Coins = {coins}, Target Sum = {target_sum}")
+#         result = rec_mnc.time_execution(coins, target_sum)
 
-        # Verify the result
-        if result == expected:
-            print(f"PASSED: Expected {expected}, Got {result}")
-        else:
-            print(f"FAILED: Expected {expected}, Got {result}")
+#         # Verify the result
+#         if result["result"] == expected:
+#             print(f"PASSED: Expected {expected}, Got {result}")
+#         else:
+#             print(f"FAILED: Expected {expected}, Got {result}")
 
 
 

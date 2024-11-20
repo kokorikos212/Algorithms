@@ -55,7 +55,9 @@ def Tester(algorithm_cls):
     
     return WrappedAlgorithm
 
-def run_experiment():
+
+
+def run_experiment1():
     import sys
     from class_MC_memo import MC_Memo
     from class_MCopt import MC_OPT
@@ -100,9 +102,11 @@ def run_experiment():
             elif i == 2:
                 results["Bottom-up"] = times 
     print(results)
-    plot_results(test_cases, results)
+    plot_all_results(test_cases, results)
+    results = {'Bottom-up': results["Bottom-up"], 'Memoization': results["Memoization"]}
+    plot_all_results(test_cases, results ) 
 
-def plot_results(test_cases, results):
+def plot_all_results(test_cases, results):
     """
     Plot the execution times for different algorithms.
 
@@ -127,7 +131,7 @@ def plot_results(test_cases, results):
     plt.legend()
     plt.tight_layout()
     plt.show()
-
+    
 if __name__ == "__main__":
-    run_experiment()
+    run_experiment1()
 
