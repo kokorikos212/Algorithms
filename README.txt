@@ -1,4 +1,3 @@
-
 # README
 
 ---
@@ -56,62 +55,3 @@ The framework supports dynamic expansion of algorithmic solutions:
       ...
   result, execution_time = MC_OPT().time_execution(coins, target_sum)
   print(f"Result: {result}, Time: {execution_time}")
-  ```
-
----
-
-## Project Structure
-
-### 1. Algorithm Implementations
-
-#### **MC_Recursive**
-- Baseline recursive solution for the **Minimum Coin Change** problem.
-- Explores all combinations, making it intuitive but inefficient for large inputs.
-
-#### **MC_Memo**
-- Memoized dynamic programming solution for improved efficiency.
-- Uses caching to avoid redundant calculations.
-
-#### **MC_OPT**
-- Optimized bottom-up dynamic programming approach.
-- Reduces both time and space complexity, suitable for large-scale inputs.
-
----
-
-### 2. Experiment and Visualization
-
-The project includes tools for:
-- Generating synthetic test cases for diverse scenarios.
-- Benchmarking algorithm performance under varying input sizes and conditions.
-- Visualizing results using graphs and heatmaps.
-
-#### Example Workflow
-```python
-# Run experiments
-execution_times = experiment()
-
-# Visualize results
-plot_results(execution_times)
-```
-
----
-
-## Instructions for Use
-
-1. **Wrap Algorithms for Testing**:
-   - Decorate any algorithm class with the `Tester` function.
-   - Use `time_execution` to measure runtime and results.
-
-2. **Expand the Framework**:
-   - Implement new algorithms by subclassing the base class.
-   - Ensure compatibility with the testing and visualization tools.
-
-3. **Analyze Performance**:
-   - Generate synthetic data using utilities provided.
-   - Benchmark algorithms and compare their efficiency.
-
----
-
-## Future Work
-
-This project forms the foundation for the next phase (**Erg3**), where the focus will shift to extending the framework with new problems.
