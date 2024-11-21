@@ -1,8 +1,9 @@
-# README
+Experiment and Visualization
+The project includes tools for:
 
----
-
-## Project: Algorithmic Solutions and Testing Framework
+Generating synthetic test cases for diverse scenarios.
+Benchmarking algorithm performance under varying input sizes and conditions.
+Visualizing results using graphs and heatmaps.
 
 **Completed as part of the course "Algorithm Design and Analysis" offered by the Department of Applied Mathematics at the University of Crete.**
 
