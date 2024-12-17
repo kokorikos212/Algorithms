@@ -1,0 +1,880 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{ResAlgo}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{setup}{%
+\section{SETUP}\label{setup}}
+
+    In this project, we explore two widely studied sorting algorithms: Merge
+Sort and Heap Sort. While Merge Sort is a classic example of the
+divide-and-conquer approach, Heap Sort follows a distinct methodology
+using a heap data structure. Both algorithms have their mathematical
+representations, which allow us to analyze their key characteristics,
+especially their efficiency.
+
+Efficiency is a crucial metric when evaluating sorting algorithms, as
+different methods may perform better depending on the size and nature of
+the input data. In this study, we aim to demonstrate the performance of
+these algorithms by applying them to randomly generated lists of various
+sizes. By doing so, we can evaluate their behavior under different
+conditions and ensure that our results are robust through a sufficiently
+large sample size.
+
+The project is divided into two parts: the implementation of the
+algorithms in Python, structured as a class, and a Jupyter notebook that
+runs experiments using these implementations. This setup allows us to
+systematically compare the performance of Merge Sort and Heap Sort and
+provide insights into their practical applications.
+
+    \textbf{System Configuration for Experiments:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Processor:} Intel(R) Core(TM) i7-4900MQ CPU @ 2.80GHz
+
+  \begin{itemize}
+  \tightlist
+  \item
+    8 CPUs (4 cores per socket, hyper-threading enabled)\\
+  \item
+    Maximum frequency: 3.8 GHz
+  \end{itemize}
+\item
+  \textbf{Memory (RAM):} 15 GB total
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Approximately 5.1 GB used\\
+  \item
+    9.6 GB available at the time of testing
+  \end{itemize}
+\item
+  \textbf{Operating System:} Ubuntu 22.04.5 LTS (Jammy)
+\end{itemize}
+
+    The \textbf{Heap Sort} algorithm has a time complexity of ( O(n \log n)
+), a characteristic it shares with the \textbf{Merge Sort} algorithm.
+This relatively efficient runtime makes both algorithms suitable for
+large datasets. However, to evaluate their actual performance in
+practice, we will need to implement certain foundational functions.
+
+\hypertarget{heap-sort-implementation}{%
+\subsubsection{Heap Sort
+Implementation:}\label{heap-sort-implementation}}
+
+\begin{itemize}
+\tightlist
+\item
+  The first step in the heap sort process is establishing the
+  \textbf{max heap} property in the given sequence ( A ). To achieve
+  this, we use the function \texttt{Build-Max-Heap}.
+\item
+  The function \texttt{Max-Heapify} ensures that the \textbf{max heap}
+  property is maintained by reorganizing elements when needed.
+\end{itemize}
+
+\hypertarget{merge-sort-implementation}{%
+\subsubsection{Merge Sort
+Implementation:}\label{merge-sort-implementation}}
+
+\begin{itemize}
+\tightlist
+\item
+  The \texttt{Merge} function handles the merging of subsequences,
+  ensuring that they are combined in the correct order.
+\item
+  The \texttt{sort1} method utilizes the \texttt{Merge} function to
+  recursively sort and merge the entire dataset.
+\end{itemize}
+
+    All the necessary code is stored in the form of classes in the python
+file Algo\_prgFunc. We are going to import it and use it in our notebook
+as a library.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{Algo\PYZus{}prgFunc} \PY{k+kn}{import} \PY{o}{*} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    We have The necessary functions to implement the
+\emph{\textbf{Merge\_sort}} algorithm and now we shall create some
+random sets to test the performance of the two algorithms. The sequences
+are going to have different sizes of {[}100, 200, 400, 800, 1600, 3200,
+6400{]} so we can compare the running time for each sets length. The
+random sets will be produced by the function get\_random\_seq of the
+Set\_creation class of the Algo\_prgFunc.py.The function uses the
+library \emph{random} to chose elements from a uniform distribution of
+the numbers inside the boundaries of a given range.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{len\PYZus{}sequences} \PY{o}{=} \PY{p}{[} \PY{l+m+mi}{100}\PY{p}{,} \PY{l+m+mi}{200}\PY{p}{,} \PY{l+m+mi}{400}\PY{p}{,} \PY{l+m+mi}{800}\PY{p}{,} \PY{l+m+mi}{1600}\PY{p}{,} \PY{l+m+mi}{3200}\PY{p}{,} \PY{l+m+mi}{6400} \PY{p}{]}
+\PY{n}{value\PYZus{}range} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{5}\PY{p}{]}
+
+\PY{n}{Sequences} \PY{o}{=} \PY{n}{Set\PYZus{}creation}\PY{p}{(}\PY{n}{value\PYZus{}range}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}multiple\PYZus{}random\PYZus{}seq}\PY{p}{(}\PY{n}{len\PYZus{}sequences}\PY{p}{)} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    With the code below, we have generated scatter plots for the random sets
+we created. We could use the same process of scatter plotting to create
+a video that demonstrates the effects of the Merge Sort algorithm on our
+random dataset over time. It's interesting to note that if a plot-frame
+is generated each time the algorithm makes a change to the working set,
+the number of plot frames created is directly proportional to the steps
+of the sorting method. The same applies to the final viewing time of the
+video.
+
+    We olso used the code below to create 2 graphs of our random set-sizes.
+Those can be found in the file \textbf{Figures} of the main repository.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{log\PYZus{}sizes} \PY{o}{=} \PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{size}\PY{p}{)} \PY{k}{for} \PY{n}{size} \PY{o+ow}{in} \PY{n}{len\PYZus{}sequences}\PY{p}{]}
+
+\PY{n}{df\PYZus{}sizes} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{len\PYZus{}sequences}\PY{p}{,} \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sizes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{plot1\PYZus{}legend} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{16}\PY{p}{)}\PY{p}{)}  \PY{c+c1}{\PYZsh{} Set the figure size here}
+\PY{n}{plt\PYZus{}sizes} \PY{o}{=} \PY{n}{df\PYZus{}sizes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{legend}\PY{o}{=}\PY{n}{plot1\PYZus{}legend}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{markersize}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Index}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sequence Sizes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<Figure size 200x1600 with 0 Axes>
+    \end{Verbatim}
+
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_10_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{parameters-of-merge-sort}{%
+\subsubsection{Parameters of Merge
+Sort}\label{parameters-of-merge-sort}}
+
+In the context of the Merge Sort algorithm, the parameters have specific
+meanings:
+
+\begin{itemize}
+\item
+  \textbf{A}: This parameter represents the array or list that you want
+  to sort. It contains the elements that need to be sorted.
+\item
+  \textbf{p}: The \texttt{p} parameter represents the starting index of
+  the subarray you want to sort. It is the index of the first element of
+  the subarray within the larger array \texttt{A}. In the typical use of
+  Merge Sort, \texttt{p} is initialized to 0 to indicate the beginning
+  of the array.
+\item
+  \textbf{r}: The \texttt{r} parameter represents the ending index of
+  the subarray you want to sort. It is the index of the last element of
+  the subarray within the larger array \texttt{A}. In the typical use of
+  Merge Sort, \texttt{r} is initialized to the index of the last element
+  in the array, which is usually \texttt{len(A)\ -\ 1}.
+\end{itemize}
+
+These values ensure that you are sorting the entire array \texttt{A}
+from the first element to the last, which is the standard application of
+the Merge Sort algorithm.
+
+    In the following cell, we are testing the running time of the Merge Sort
+algorithm for various sizes of randomly generated sequences using a
+utility function. To minimize the impact of randomness on the results,
+we will average the execution times over a small number of generated
+sequences for each size. As shown in the resulting graphs, the
+performance times may vary slightly due to the inherent randomness of
+the sequences. However, we observe a clear trend where the execution
+time consistently follows the expected growth pattern, as predicted by
+the algorithm's time complexity, 𝑂 ( 𝑛 log ⁡ 𝑛 ) .
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{Experiment}\PY{p}{(}\PY{n}{Algorithm}\PY{p}{,} \PY{n}{Sequences}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Use the Merge \PYZus{}sort algorithm }
+    \PY{n}{Times} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{Sorted\PYZus{}sequences} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{index}\PY{p}{,} \PY{n}{seq} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{Sequences}\PY{p}{)}\PY{p}{:}
+        \PY{n}{ALgorithm\PYZus{}isinstance} \PY{o}{=} \PY{n}{Algorithm}\PY{p}{(}\PY{n}{seq}\PY{p}{)}
+        \PY{n}{runtime} \PY{o}{=} \PY{n}{ALgorithm\PYZus{}isinstance}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{recorted\PYZus{}time}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} 
+        \PY{n}{Sorted\PYZus{}sequence} \PY{o}{=} \PY{n}{ALgorithm\PYZus{}isinstance}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{sorted\PYZus{}data}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} 
+        \PY{n}{Times}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{runtime}\PY{p}{)}
+        \PY{c+c1}{\PYZsh{} print(Sorted\PYZus{}sequence)}
+        \PY{n}{Sorted\PYZus{}sequences}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{Sorted\PYZus{}sequence}\PY{p}{)}    
+
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{Times}\PY{p}{)} 
+    \PY{n}{Times\PYZus{}df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Times}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{n}{Times}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{n}{plt\PYZus{}times} \PY{o}{=} \PY{n}{Times\PYZus{}df}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{legend}\PY{o}{=}\PY{n}{plot1\PYZus{}legend}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{markersize}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Merge Runtime\PYZhy{}Length plot}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Index}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Runtime}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+    \PY{k}{return} \PY{n}{Sorted\PYZus{}sequences}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{n}{sorted\PYZus{}seqences} \PY{o}{=} \PY{n}{Experiment}\PY{p}{(}\PY{n}{Mergesort}\PY{p}{,} \PY{n}{Sequences}\PY{p}{)} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+[0.0005147457122802734, 0.000682830810546875, 0.001577138900756836,
+0.004756927490234375, 0.010150909423828125, 0.015300273895263672,
+0.03699946403503418]
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+[0.0007410049438476562, 0.001373291015625, 0.0030410289764404297,
+0.00678253173828125, 0.014769315719604492, 0.030747175216674805,
+0.037320613861083984]
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+[0.0006575584411621094, 0.0013647079467773438, 0.0031151771545410156,
+0.007399797439575195, 0.01477813720703125, 0.030884981155395508,
+0.03804636001586914]
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+[0.0006453990936279297, 0.0013146400451660156, 0.003013134002685547,
+0.006631374359130859, 0.014245271682739258, 0.019505977630615234,
+0.025883197784423828]
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+[0.00037288665771484375, 0.0005419254302978516, 0.001241445541381836,
+0.002552509307861328, 0.005570173263549805, 0.012426376342773438,
+0.028608083724975586]
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_5.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    The Merge Sort algorithm has a consistent time complexity of 𝑂 ( 𝑛 log ⁡
+𝑛 ) O(nlogn) for all input types, including sorted, reverse sorted, or
+completely random sequences.
+
+This is because Merge Sort's behavior depends on how the array is
+recursively divided and merged, not on the initial ordering of the
+elements. The algorithm always divides the array into subarrays, sorts
+them, and then merges them back together. Since this process happens in
+a fixed manner regardless of the input order, the time complexity
+remains the same.
+
+Let us confirm that using our library to sort the reversed sorted
+sequences. We are going to reverse a sorted sequence from the previous
+step.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{reverse\PYZus{}sequences} \PY{o}{=} \PY{p}{[}\PY{n}{seq}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{k}{for} \PY{n}{seq} \PY{o+ow}{in} \PY{n}{sorted\PYZus{}seqences}\PY{p}{]} 
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{reverse\PYZus{}sequences}\PY{p}{)}\PY{p}{)}
+\PY{n}{reverse\PYZus{}sorted} \PY{o}{=} \PY{n}{Experiment}\PY{p}{(}\PY{n}{Mergesort}\PY{p}{,} \PY{n}{reverse\PYZus{}sequences}\PY{p}{)} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+7
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+[0.0010023117065429688, 0.002886533737182617, 0.006382942199707031,
+0.0068149566650390625, 0.014935016632080078, 0.020355939865112305,
+0.03324079513549805]
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_15_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    As we can see the results are pretty much the same!!
+
+    Here we defining the function that is responsibol for maintaining the
+max-heap propertie in the sequense A. \#\#\# Parameters of Heap Sort
+
+In the context of the Heap Sort algorithm, the parameters have specific
+meanings:
+
+\begin{itemize}
+\item
+  \textbf{A}: This parameter represents the array or list that you want
+  to sort. It contains the elements that need to be sorted using the
+  Heap Sort algorithm.
+\item
+  \textbf{i}: The \texttt{i} parameter represents the index of the
+  current element within the heap. It is used to traverse the elements
+  in the heap data structure during the sorting process.
+\item
+  \textbf{n}: The \texttt{n} parameter represents the total number of
+  elements in the array. It signifies the size of the heap and helps in
+  controlling the sorting process within the specified range.
+\end{itemize}
+
+These values are essential for Heap Sort to organize and sort the
+elements efficiently within the provided array. The \texttt{i} and
+\texttt{n} parameters play a crucial role in navigating and maintaining
+the heap structure, while the \texttt{A} parameter holds the elements to
+be sorted.
+
+    Let us use the same random sequences generated earlyer to run the same
+experiments with the heap sort algorithm.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{n}{sorted\PYZus{}seqences} \PY{o}{=} \PY{n}{Experiment}\PY{p}{(}\PY{n}{Heapsort}\PY{p}{,} \PY{n}{Sequences}\PY{p}{)} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[0.0005061626434326172, 0.0009455680847167969, 0.0024123191833496094,
+0.00975179672241211, 0.01892685890197754, 0.03986001014709473,
+0.0755758285522461]
+[0.00045561790466308594, 0.00095367431640625, 0.0021681785583496094,
+0.0052721500396728516, 0.010647296905517578, 0.02425098419189453,
+0.05413699150085449]
+[0.00045561790466308594, 0.0009627342224121094, 0.0022771358489990234,
+0.004858255386352539, 0.011079549789428711, 0.026369571685791016,
+0.07332968711853027]
+[0.0004792213439941406, 0.0009653568267822266, 0.0022077560424804688,
+0.004981040954589844, 0.010834932327270508, 0.02380537986755371,
+0.05140519142150879]
+[0.0004649162292480469, 0.0010251998901367188, 0.0022270679473876953,
+0.0049474239349365234, 0.010951042175292969, 0.02358555793762207,
+0.05481863021850586]
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_5.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{reverse\PYZus{}sequences} \PY{o}{=} \PY{p}{[}\PY{n}{seq}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{k}{for} \PY{n}{seq} \PY{o+ow}{in} \PY{n}{sorted\PYZus{}seqences}\PY{p}{]} 
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{reverse\PYZus{}sequences}\PY{p}{)}\PY{p}{)}
+\PY{n}{reverse\PYZus{}sorted} \PY{o}{=} \PY{n}{Experiment}\PY{p}{(}\PY{n}{Mergesort}\PY{p}{,} \PY{n}{reverse\PYZus{}sequences}\PY{p}{)} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+7
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+Sorting complete.
+[0.0010266304016113281, 0.002192258834838867, 0.004822492599487305,
+0.013811349868774414, 0.025626182556152344, 0.03325176239013672,
+0.0347447395324707]
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_20_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    In our experiments, we tested the running time of the Merge Sort
+algorithm on various randomly generated sequences. As we analyzed the
+runtime results, it became clear that the Merge Sort algorithm
+consistently adhered to its theoretical time complexity of 𝑂 ( 𝑛 log ⁡ 𝑛
+) O(nlogn). The recorded runtimes demonstrated a predictable pattern,
+showing a logarithmic growth relative to the size of the input
+sequences.
+
+The graph produced from our experimental data illustrates this
+relationship effectively, with the execution times plotted against the
+indices of the sequences. Each point on the graph represents the runtime
+for a specific sequence, and while there are slight variations in the
+execution times due to external factors such as system load and memory
+access patterns, the overall trend remains evident.
+
+Additionally, it is worth noting that the performance of the Merge Sort
+algorithm remained stable even when the input sequences were in reverse
+order, highlighting its efficiency across different arrangements. This
+robustness reinforces the suitability of Merge Sort for a wide range of
+sorting tasks, regardless of the initial order of the data.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
